@@ -83,7 +83,7 @@
 \begin{frame}{share modes}
     \pause
 \begin{itemize}[<+->]
-\item like locks of
+\item like locks of entire files
 \item  acquired at open/create (share access)
 \item allow/deny concurrent opens with certain access modes
      \pause
@@ -206,25 +206,42 @@
 \end{block}
 \end{frame}
 
-\section<presentation>[SMB\_CREATE]{The SMB\_CREATE call}
-\begin{frame}{The SMB\_CREATE call}
-    \pause
-    \begin{itemize}[<+->]
-        \item create disposition:
-        \pause
-        \begin{itemize}[<+->]
-            \item open existing files
-            \item create new files
-        \end{itemize}
-        \item desired access
-        \item share access: share modes
-        \item oplocks/leases
+\section<presentation>[SMB2 CREATE]{The SMB2 CREATE call}
+\begin{frame}{The SMB2 CREATE call}
+\begin{block}{a pretty complicated/complex call}<2->
+        It does many things:
+\begin{itemize}
+\item open existing  files
+\item create new files
+\item oplocks/leases
+\item share modes
+\end{itemize}
+\end{block}
+
+\begin{block}{important fields}<3->
+    \begin{itemize}
+    \item filename
+    \item CreateDisposition:
+    \begin{itemize}
+       \item open existing files
+       \item create new files
     \end{itemize}
+    \item FileAttributes: for creating new
+\item CreateAttributes:  e. g. for directories
+    \item DesiredAccess
+    \item ShareAccess: share modes
+    \item RequestedOplockLevel
+    \item list of create contexts (e. g. for leases)
+    \end{itemize}
+\end{block}
 \end{frame}
 
-\begin{frame}{create docs}
-\begin{block}{MS protocol spec SMB\_CREATE}
+\begin{frame}{create spec docs}
+\begin{block}{MS protocol spec SMB2 CREATE REQUEST}
     \url{https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/e8fb45c1-a03d-44ca-b7ae-47385cfd7997}
+\end{block}
+\begin{block}{MS protocol spec  SMB2\_CREATE\_LEASE context}
+\url{https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/250a5100-f8b0-4b32-a202-f592ce4c05e7}
 \end{block}
 \end{frame}
 
@@ -277,6 +294,7 @@ oplock/lease & Linux kernel oplock \\
 \begin{frame}{What about Multi-Protocol?}
 \begin{block}{yeah, what about it?}
 \begin{itemize}
+\item POSIX: see above
 \item NFS: see below
 \item S3: not here ...
 \end{itemize}
