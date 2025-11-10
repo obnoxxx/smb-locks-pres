@@ -296,12 +296,12 @@ oplock/lease & Linux kernel oplock \\
 \begin{itemize}
 \item POSIX: see above
 \item NFS: see below
-\item S3: not here ...
+\item S3: not covered here ...
 \end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}{Multi-Proto: SMB $\leftrightarrow$ NFS}
+\begin{frame}{Multi-Proto}{SMB $\leftrightarrow$ NFS}
 \begin{block}{SMB $\leftrightarrow$ NFS}<2->
 \begin{center}
 \begin{tabular}{ |c|c| }
@@ -309,24 +309,94 @@ oplock/lease & Linux kernel oplock \\
  SMB3 & NFS4  \\
  lease & delegation \\
  share mode & share reservation \\
- other & client request \\
+ others &  per client request \\
 \hline
 \end{tabular}
 \end{center}
 \end{block}
-\begin{alertblock}{Warning}<3->
+\begin{alertblock}{Warning: very coarse}<3->
 
 \textbf{cum grano salis -- details differ}
 \end{alertblock}
+\begin{alertblock}{Warning: relevance ...}
+
+what NFS clients use which calls?
+
+\end{alertblock}
 \begin{alertblock}{TODO: Multi-Protocol}<4->
 \begin{itemize}
+\item investigate NFS clients' use of delegations/resetvations
 \item Ganesha+CephFS has clustered delegations and reservations.
+\begin{itemize}
 \item Correct? ($\Rightarrow$ verify!)
 \item via FSAL? ($\Rightarrow$ verify!)
+\end{itemize}
 \item: how do they do it? $\Rightarrow$ A model for Samba? ($\Rightarrow$ try!)
 \end{itemize}
 \end{alertblock}
 \end{frame}
+
+\begin{frame}{Multi-Proto SMB+NFS}{possible approach}
+
+
+
+\pause
+\begin{block}{client OS}<2->
+Identify relevant client operating systems, e. g.:
+\begin{itemize}
+\item MS windows
+\item MacOS
+\item Linux/Unix
+\end{itemize}
+\end{block}
+
+\pause
+\begin{block}{Apps/syscalls}a<3-
+identify relevant applications, e. g.:
+\begin{itemize}
+\item MS office
+\item libreoffice
+\item database
+\item git / development 
+\end{itemize}
+identify  syscalls related to storage/locking used by apps?
+\end{block}
+% -> which syscalls?
+\pause
+\begin{block}{protocol clients / calls}<4->
+identify relevant protocol clients, e. g.:
+\begin{itemize}
+\item  Windows smb mount (\texttt{net use})
+\item  Windows nfs client??
+\item Linux kernel smb client (\texttt{cifs.ko}) ??
+\item Linux kernel nfs client
+\item MacOS smb client
+\item macOS nfs client??
+\end{itemize}
+identify (mapped) file protocol calls used 
+\end{block} 
+
+\begin{block}{reference server}<5->
+    udentify reference server, e. g.:
+    \begin{itemize}
+    \item MS Windows
+    \item netapp
+    \item EMC isilon
+    \item ...
+    \end{itemize}
+\end{block}
+\begin{block}{test suite}<6->
+    develop  client test suite for contention  against reference server 
+\end{block}
+
+\begin{block}{server implementation}<7->
+  model multi-proto server behavior after testsuite
+\end{block}
+
+\end{frame}
+
+
+
 
     \section<presentation>[end]{Wrap-up}
 \begin{frame}{The End}
